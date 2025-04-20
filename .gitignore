@@ -1,5 +1,17 @@
 # Ignorar arquivos objeto e binários
+*.o
 *.exe
+*.out
+
+# Ignorar pastas de build
+/build/
+/bin/
+/obj/
+/output/
+
+# Ignorar arquivos temporários
+*.log
+*.tmp
 
 # Ignorar configs do VSCode
 .vscode/
