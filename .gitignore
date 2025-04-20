@@ -1,0 +1,5 @@
+# Ignorar arquivos objeto e binários
+*.exe
+
+# Ignorar configs do VSCode
+.vscode/
