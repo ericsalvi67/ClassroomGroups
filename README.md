@@ -59,12 +59,12 @@ em um grupo daquela turma)
  8) Remover aluno do grupo de uma turma (remover só du grupo, não da turma)  
  9) Consultar alunos dos grupos de uma turma (mostrar cada grupo e alunos que 
 fazem parte dele)  
- 10)Alunos sem grupo: para uma turma informada, apresentar os nomes dos alunos 
-sem grupo  
- 11)Alunos em mais de uma turma: apresentar os nomes dos alunos  que estão em 
-mais de uma turma  
- 12)Alunos em apenas uma turma: apresentar os nomes dos alunos  que estão em 
-apenas uma turma  
+ 10) Alunos sem grupo: para uma turma informada, apresentar os nomes dos alunos 
+sem grupo   
+ 11) Alunos em mais de uma turma: apresentar os nomes dos alunos  que estão em 
+mais de uma turma   
+ 12) Alunos em apenas uma turma: apresentar os nomes dos alunos  que estão em 
+apenas uma turma
  13) Outras operações (a seu critério), como: quantidade de grupos por turma, total 
 geral de alunos (descartar as repetições), turma com mais grupos, etc
  Pode ter uma operação automática de divisão dos alunos de uma turma em 
