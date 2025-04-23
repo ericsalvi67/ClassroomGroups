@@ -29,7 +29,7 @@ typedef struct header {
 
 // ---------- //
 
-void incluir_nova_turma(Header* h, char novoCodigoExt[20]) { //recebe um codigo externo para a turma para pre carrregar dados
+void incluir_nova_turma(Header* h, char novoCodigoExt[20]) { // 01 - recebe um codigo externo para a turma para pre carrregar dados
     char novoCodigo[20];
     if (strcmp(novoCodigoExt, "") == 0) {
         do{
@@ -67,9 +67,8 @@ void incluir_nova_turma(Header* h, char novoCodigoExt[20]) { //recebe um codigo 
 
     printf("Turma '%10s' incluida com sucesso!\n", novoCodigo);
 }
-    // ---------- //
 
-void listar_turmas(Header h) {
+void listar_turmas(Header h) { // 03
     if (h.s_qClass == 0) {
         printf("nenhuma turma cadastrada.\n");
         return;
@@ -82,9 +81,7 @@ void listar_turmas(Header h) {
     printf("-------------------\n");
 }
 
-// ---------- //
-
-void incluir_novo_aluno(Header* h, int codigoAluno, char nomeAlunoExt[50], int turmaIndexExt) 
+void incluir_novo_aluno(Header* h, int codigoAluno, char nomeAlunoExt[50], int turmaIndexExt) // 04
 {   
     int turmaIndex;
     char nomeAluno[50];
@@ -143,8 +140,7 @@ void incluir_novo_aluno(Header* h, int codigoAluno, char nomeAlunoExt[50], int t
     printf("Aluno '%20s' adicionado a turma '%10s' com sucesso!\n", nomeAluno, turmaAtual->codigo);
 }
 
-
-void listar_alunos(Header h)
+void listar_alunos(Header h) // 06
 {
     if (h.s_qClass == 0) 
     {
@@ -159,19 +155,75 @@ void listar_alunos(Header h)
         Aluno *aux = h.turma[i].alunos;
         if (aux == NULL) 
         {
-            printf("      Nenhum aluno cadastrado.\n");
+            printf("   Nenhum aluno cadastrado.\n");
         } 
         else 
         {
             int j = 1;
             while (aux != NULL) 
             {
-                printf("   %d. %s\n", j++, aux->nome);
+                printf("   %d. %s.\n", aux->codigo, aux->nome);
                 aux = aux->prox;
+                j += 1;
             }
         }
     }
     printf("-------------------\n");
+}
+
+void remover_aluno(Header *h) {  // 05
+    if (h->s_qClass == 0) {
+        printf("Nenhuma turma cadastrada.\n");
+        return;
+    }
+
+    listar_turmas(*h);
+
+    int turmaIndex;
+    printf("Digite o numero da turma que deseja acessar: ");
+    scanf("%d", &turmaIndex);
+    turmaIndex--;
+
+    if (turmaIndex < 0 || turmaIndex >= h->s_qClass) {
+        printf("Turma invalida.\n");
+        return;
+    }
+
+    Turma *turmaAtual = &h->turma[turmaIndex];
+
+    if (turmaAtual->alunos == NULL) {
+        printf("Essa turma nao possui alunos.\n");
+        return;
+    }
+
+    listar_alunos(*h);
+
+    int codigoAluno;
+    printf("Digite o codigo do aluno que deseja remover: ");
+    scanf("%d", &codigoAluno);
+
+    Aluno *atual = turmaAtual->alunos;
+    Aluno *anterior = NULL;
+
+    while (atual != NULL && atual->codigo != codigoAluno) {
+        anterior = atual;
+        atual = atual->prox;
+    }
+
+    if (atual == NULL) {
+        printf("Aluno com codigo %d não encontrado.\n", codigoAluno);
+        return;
+    }
+
+    // aqui remove
+    if (anterior == NULL) {
+        turmaAtual->alunos = atual->prox; // caso seja o primeiro
+    } else {
+        anterior->prox = atual->prox;
+    }
+
+    printf("Aluno '%s' removido com sucesso da turma '%s'.\n", atual->nome, turmaAtual->codigo);
+    free(atual);
 }
 
 void inicioProg(Header* sistema)
@@ -216,6 +268,7 @@ void menu(Header* sistema) //menu de opções para o usuario
     printf("2. Listar turmas\n");
     printf("3. Incluir novo aluno\n");
     printf("4. Listar alunos\n");
+    printf("5. Remover aluno\n");
 
     printf("\n0. Sair\n");
 
@@ -223,7 +276,7 @@ void menu(Header* sistema) //menu de opções para o usuario
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
         getchar(); // Limpa o buffer do teclado
-    }while(opcao < 0 || opcao > 4);
+    }while(opcao < 0 || opcao > 5);
 
     switch (opcao) {
         case 1:
@@ -238,12 +291,17 @@ void menu(Header* sistema) //menu de opções para o usuario
         case 4:
             listar_alunos(*sistema);
             break;
+        case 5:
+            remover_aluno(sistema);
+            break;
         case 0:
             free(sistema->turma); // Libera a memória alocada para as turmas
             exit(0);
     }
 
 }
+
+// ---------- //
 
 int main() 
 {
