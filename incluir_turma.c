@@ -366,13 +366,12 @@ void remover_aluno(Header *h) {  // 05
         return;
     }
 
-    listar_alunos_de_uma_turma(*h, turmaIndex); // Apenas a turma escolhida
+    listar_alunos_de_uma_turma(*h, turmaIndex);
 
     int codigoAluno;
     printf("Digite o codigo do aluno que deseja remover: ");
     scanf("%d", &codigoAluno);
 
-    // 1) Remover da lista de alunos
     Aluno *atual = turmaAtual->alunos;
     Aluno *anterior = NULL;
 
@@ -395,7 +394,7 @@ void remover_aluno(Header *h) {  // 05
 
     free(atual);
 
-    // 2) Remover de todos os grupos da turma
+    // Remove grupo
     Grupo *g = turmaAtual->grupos;
     while (g != NULL) {
         Aluno *ag = g->alunos_grupo;
@@ -409,7 +408,7 @@ void remover_aluno(Header *h) {  // 05
                     ag_ant->prox = ag->prox;
 
                 free(ag);
-                break; // Um aluno só aparece uma vez por grupo
+                break;
             }
 
             ag_ant = ag;
@@ -420,6 +419,74 @@ void remover_aluno(Header *h) {  // 05
     }
 
     printf("Aluno removido de todos os grupos da turma.\n");
+}
+
+void alunos_em_mais_de_uma_turma(Header h) {
+    if (h.s_qClass < 2) {
+        printf("E necessário ao menos duas turmas para essa verificacao.\n");
+        return;
+    }
+
+    printf("\n--- Alunos em mais de uma turma ---\n");
+
+    // O que ja foi guardado fica listado
+    Aluno *jaListados = NULL;
+
+    for (int i = 0; i < h.s_qClass; i++) {
+        Aluno *a1 = h.turma[i].alunos;
+        while (a1 != NULL) {
+
+            int contador = 0;
+
+            for (int j = 0; j < h.s_qClass; j++) {
+                if (i == j) continue;
+
+                Aluno *a2 = h.turma[j].alunos;
+                while (a2 != NULL) {
+                    if (strcmp(a1->nome, a2->nome) == 0) {
+                        contador++;
+                        break;
+                    }
+                    a2 = a2->prox;
+                }
+            }
+
+            // Se tem +1 turma e nao foi listado
+            if (contador > 0) {
+                int jaExiste = 0;
+                Aluno *aux = jaListados;
+                while (aux != NULL) {
+                    if (strcmp(aux->nome, a1->nome) == 0) {
+                        jaExiste = 1;
+                        break;
+                    }
+                    aux = aux->prox;
+                }
+
+                if (!jaExiste) {
+                    printf("%s\n", a1->nome);
+
+                    Aluno *novo = (Aluno*) malloc(sizeof(Aluno));
+                    strcpy(novo->nome, a1->nome);
+                    novo->prox = jaListados;
+                    jaListados = novo;
+                }
+            }
+
+            a1 = a1->prox;
+        }
+    }
+
+    if (jaListados == NULL)
+        printf("Nenhum aluno esta em mais de uma turma.\n");
+
+    while (jaListados != NULL) {
+        Aluno *temp = jaListados;
+        jaListados = jaListados->prox;
+        free(temp);
+    }
+
+    printf("-------------------------------\n");
 }
 
 void inicioProg(Header* sistema)
