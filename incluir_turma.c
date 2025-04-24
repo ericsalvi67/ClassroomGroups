@@ -29,7 +29,7 @@ typedef struct header {
 
 // ---------- //
 
-void listar_alunos(Header h) // 06
+void listar_alunos(Header h, int turma) // 06
 {
     if (h.s_qClass == 0) 
     {
@@ -37,11 +37,35 @@ void listar_alunos(Header h) // 06
         return;
     }
 
-    printf("\n--- Lista de Alunos por Turma ---\n");
-    for (int i = 0; i < h.s_qClass; i++) 
+    if (turma < 0 || turma >= h.s_qClass) 
     {
-        printf("%d. %s\n", i + 1, h.turma[i].codigo);
-        Aluno *aux = h.turma[i].alunos;
+        printf("Turma inválida.\n");
+        return;
+    }
+
+    if (turma == 0){
+        printf("\n--- Lista de Alunos por Turma ---\n");
+        for (int i = 0; i < h.s_qClass; i++) 
+        {
+            printf("%d. %s\n", i + 1, h.turma[i].codigo);
+            Aluno *aux = h.turma[i].alunos;
+            if (aux == NULL) 
+            {
+                printf("   Nenhum aluno cadastrado.\n");
+            } 
+            else 
+            {
+                while (aux != NULL) 
+                {
+                    printf("   %d. %s\n", aux->codigo, aux->nome);
+                    aux = aux->prox;
+                }
+            }
+        }
+    }
+    else {
+        printf("\n--- Alunos da Turma %s ---\n", h.turma[turma].codigo);
+        Aluno *aux = h.turma[turma].alunos;
         if (aux == NULL) 
         {
             printf("   Nenhum aluno cadastrado.\n");
@@ -50,7 +74,7 @@ void listar_alunos(Header h) // 06
         {
             while (aux != NULL) 
             {
-                printf("   %d. %s.\n", aux->codigo, aux->nome);
+                printf("   %d. %s\n", aux->codigo, aux->nome);
                 aux = aux->prox;
             }
         }
@@ -69,28 +93,6 @@ void listar_turmas(Header h) { // 03
         printf("%d. %s\n", i + 1, h.turma[i].codigo);
     }
     printf("-------------------\n");
-}
-
-void listar_alunos_de_uma_turma(Header h, int turmaIndex) { // precisa kkkk
-    if (turmaIndex < 0 || turmaIndex >= h.s_qClass) {
-        printf("Turma inválida.\n");
-        return;
-    }
-
-    Turma t = h.turma[turmaIndex];
-
-    printf("\n--- Alunos da Turma %s ---\n", t.codigo);
-    Aluno *aux = t.alunos;
-
-    if (aux == NULL) {
-        printf("   Nenhum aluno cadastrado.\n");
-    } else {
-        while (aux != NULL) {
-            printf("   %d. %s\n", aux->codigo, aux->nome);
-            aux = aux->prox;
-        }
-    }
-    printf("--------------------------\n");
 }
 
 void incluir_nova_turma(Header* h, char novoCodigoExt[20]) { // 01 - recebe um codigo externo para a turma para pre carrregar dados
@@ -151,6 +153,7 @@ void incluir_novo_aluno(Header* h, int codigoAluno, char nomeAlunoExt[50], int t
         } while (strcmp(nomeAluno, "") == 0);
         do
         {
+            listar_turmas(*h);
             printf("Digite o numero da turma: ");
             scanf("%d", &turmaIndex);
         } while (turmaIndex < 0 );
@@ -203,17 +206,13 @@ void incluir_aluno_no_grupo_de_uma_turma(Header* h){  // 07
         return;
     }
 
-    listar_turmas(*h);
-
     int turmaIndex;
-    printf("Digite o numero da turma que deseja acessar: ");
-    scanf("%d", &turmaIndex);
-    turmaIndex--;
-
-    if (turmaIndex < 0 || turmaIndex >= h->s_qClass) {
-        printf("Turma inválida.\n");
-        return;
-    }
+    do{
+        listar_turmas(*h);
+        printf("Digite o numero da turma que deseja acessar: ");
+        scanf("%d", &turmaIndex);
+        turmaIndex--;
+    } while (turmaIndex < 0 || turmaIndex >= h->s_qClass);
 
     Turma *turmaAtual = &h->turma[turmaIndex];
 
@@ -222,11 +221,13 @@ void incluir_aluno_no_grupo_de_uma_turma(Header* h){  // 07
         return;
     }
 
-    listar_alunos_de_uma_turma(*h, turmaIndex);
-
     int codigoAluno;
-    printf("Digite o codigo do aluno que deseja adicionar a um grupo: ");
-    scanf("%d", &codigoAluno);
+    listar_alunos(*h, turmaIndex);
+    do{
+        printf("Digite o codigo do aluno que deseja adicionar a um grupo: ");
+        scanf("%d", &codigoAluno);
+        fflush(stdin); // Limpa o buffer do teclado
+    } while (codigoAluno <= 0);
 
     Aluno *alunoSelecionado = turmaAtual->alunos;
     while (alunoSelecionado != NULL && alunoSelecionado->codigo != codigoAluno) {
@@ -354,14 +355,12 @@ void remover_aluno(Header *h) {  // 05
     listar_turmas(*h);
 
     int turmaIndex;
-    printf("Digite o numero da turma que deseja acessar: ");
-    scanf("%d", &turmaIndex);
-    turmaIndex--;
-
-    if (turmaIndex < 0 || turmaIndex >= h->s_qClass) {
-        printf("Turma invalida.\n");
-        return;
-    }
+    do{
+        listar_turmas(*h);
+        printf("Digite o numero da turma que deseja acessar: ");
+        scanf("%d", &turmaIndex);
+        turmaIndex--;
+    } while (turmaIndex < 0 || turmaIndex >= h->s_qClass);
 
     Turma *turmaAtual = &h->turma[turmaIndex];
 
@@ -370,11 +369,14 @@ void remover_aluno(Header *h) {  // 05
         return;
     }
 
-    listar_alunos_de_uma_turma(*h, turmaIndex);
-
     int codigoAluno;
-    printf("Digite o codigo do aluno que deseja remover: ");
-    scanf("%d", &codigoAluno);
+    do{
+        listar_alunos(*h, turmaIndex);
+        printf("Digite o codigo do aluno que deseja remover: ");
+        scanf("%d", &codigoAluno);
+        fflush(stdin); // Limpa o buffer do teclado
+    } while (codigoAluno <= 0);
+
 
     Aluno *atual = turmaAtual->alunos;
     Aluno *anterior = NULL;
@@ -447,7 +449,7 @@ void alunos_em_mais_de_uma_turma(Header h) {
 
                 Aluno *a2 = h.turma[j].alunos;
                 while (a2 != NULL) {
-                    if (strcmp(a1->nome, a2->nome) == 0) {
+                    if (a1->codigo == a2->codigo) {
                         contador++;
                         break;
                     }
@@ -460,7 +462,7 @@ void alunos_em_mais_de_uma_turma(Header h) {
                 int jaExiste = 0;
                 Aluno *aux = jaListados;
                 while (aux != NULL) {
-                    if (strcmp(aux->nome, a1->nome) == 0) {
+                    if (aux->codigo == a1->codigo) {
                         jaExiste = 1;
                         break;
                     }
@@ -468,10 +470,11 @@ void alunos_em_mais_de_uma_turma(Header h) {
                 }
 
                 if (!jaExiste) {
-                    printf("%s\n", a1->nome);
+                    printf("%d. %s\n",a1->codigo, a1->nome);
 
                     Aluno *novo = (Aluno*) malloc(sizeof(Aluno));
                     strcpy(novo->nome, a1->nome);
+                    novo->codigo = a1->codigo;
                     novo->prox = jaListados;
                     jaListados = novo;
                 }
@@ -493,26 +496,18 @@ void alunos_em_mais_de_uma_turma(Header h) {
     printf("-------------------------------\n");
 }
 
-void remover_aluno_do_grupo(Header *h) { // criado com ajuda do chat, deve ser simplificado // 08
+void remover_aluno_do_grupo(Header *h) { // 08
     if (h->s_qClass == 0) {
         printf("Nenhuma turma cadastrada.\n");
         return;
     }
 
-    listar_turmas(*h);
     int turmaIndex;
-    printf("Digite o numero da turma: ");
-    scanf("%d", &turmaIndex);
-    fflush(stdin); // Limpa o buffer do teclado
-    turmaIndex--; // Ajusta o índice para 0 baseado (1,2,3) -> (0,1,2). Baseado no Listar_turmas
-
-    do {
+     do {
+        listar_turmas(*h);
         printf("Digite o numero da turma: ");
         scanf("%d", &turmaIndex);
         fflush(stdin); // Limpa o buffer do teclado
-        if (turmaIndex < 0 || turmaIndex >= h->s_qClass) {
-            printf("Turma inválida. Tente novamente.\n");
-        }
         turmaIndex--; // Ajusta o índice para 0 baseado (1,2,3) -> (0,1,2). Baseado no Listar_turmas
     } while (turmaIndex < 0 || turmaIndex >= h->s_qClass);
 
@@ -595,6 +590,57 @@ void remover_aluno_do_grupo(Header *h) { // criado com ajuda do chat, deve ser s
     }
 }
 
+void remover_turma(Header *h) {
+    if (h->s_qClass == 0) {
+        printf("Nenhuma turma cadastrada.\n");
+        return;
+    }
+
+    int turmaIndex;
+    do {
+        listar_turmas(*h);
+        printf("Digite o numero da turma que deseja remover: ");
+        scanf("%d", &turmaIndex);
+        turmaIndex--;
+    } while ((turmaIndex < 0 || turmaIndex >= h->s_qClass));
+
+    Turma *turma = &h->turma[turmaIndex];
+
+    // Liberar memória dos alunos
+    Aluno *aluno = turma->alunos;
+    while (aluno != NULL) {
+        Aluno *temp = aluno;
+        aluno = aluno->prox;
+        free(temp);
+    }
+
+    // Liberar memória dos grupos e dos alunos nos grupos
+    Grupo *grupo = turma->grupos;
+    while (grupo != NULL) {
+        Aluno *alunoGrupo = grupo->alunos_grupo;
+        while (alunoGrupo != NULL) {
+            Aluno *temp = alunoGrupo;
+            alunoGrupo = alunoGrupo->prox;
+            free(temp);
+        }
+
+        Grupo *tempGrupo = grupo;
+        grupo = grupo->prox;
+        free(tempGrupo);
+    }
+
+    // Deslocar as turmas para seguir sequencia
+    for (int i = turmaIndex; i < h->s_qClass - 1; i++) {
+        h->turma[i] = h->turma[i + 1];
+    }
+
+    h->s_qClass--;
+
+    printf("Turma removida com sucesso.\n");
+}
+
+// ---------- //
+
 void inicioProg(Header* sistema)
 {
     printf("-------------------\n");
@@ -621,9 +667,7 @@ void inicioProg(Header* sistema)
     incluir_novo_aluno(sistema, 134, "Pedro Henrique", 3);
     incluir_novo_aluno(sistema, 135, "Joao Pedro", 1);
     printf("--- Alunos incluidos ---\n");
-    //pre-carrega os grupos
-
-    //pre-carrega os alunos dos grupos
+    //pre-carrega os alunos e grupos
 
 
     printf("Informacoes incluidas com sucesso.\n");
@@ -634,20 +678,20 @@ void menu(Header* sistema) //menu de opções para o usuario
 {
     int opcao;
     printf("\n--- Menu ---\n");
-    printf("1. Incluir turma\n");
-    printf("2. Remover turma                    // 02 - nao implementado \n"); 
-    printf("3. Listar turmas\n");
+    printf("1.  Incluir turma\n");
+    printf("2.  Remover turma\n"); 
+    printf("3.  Listar turmas\n");
 
-    printf("4. Incluir aluno\n");
-    printf("5. Remover aluno                    // 05 - nao implementado\n"); 
-    printf("6. Listar alunos\n");
+    printf("4.  Incluir aluno\n");
+    printf("5.  Remover aluno\n"); 
+    printf("6.  Listar alunos\n");
 
-    printf("7. Incluir aluno no grupo\n");
-    printf("8. Remover aluno de um grupo\n"); 
-    printf("9. Consultar alunos dos grupos de uma turma\n");
+    printf("7.  Incluir aluno no grupo\n");
+    printf("8.  Remover aluno de um grupo\n"); 
+    printf("9.  Consultar alunos dos grupos de uma turma\n");
 
     printf("10. Alunos sem grupo                // 10 - nao implementado\n"); 
-    printf("11. Alunos em mais de uma turma     // 11 - nao implementado\n"); 
+    printf("11. Alunos em mais de uma turma\n"); 
     printf("12. Alunos em apenas uma turma      // 12 - nao implementado\n"); 
 
     printf("\n0. Sair\n");
@@ -663,7 +707,7 @@ void menu(Header* sistema) //menu de opções para o usuario
             incluir_nova_turma(sistema, "");
             break;
         case 2:
-            printf("Remover turma ainda não implementado.\n");
+            remover_turma(sistema);
             break;
         case 3:
             listar_turmas(*sistema);
@@ -675,10 +719,10 @@ void menu(Header* sistema) //menu de opções para o usuario
             remover_aluno(sistema);
             break;
         case 6:
-            listar_alunos(*sistema);
+            listar_alunos(*sistema, 0);
             break;
         case 7:
-            incluir_aluno_no_grupo_de_uma_turma(sistema);
+            incluir_aluno_no_grupo_de_uma_turma(sistema); // precisa adicionar no inicioprog()
             break;
         case 8:
             remover_aluno_do_grupo(sistema);
