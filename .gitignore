@@ -12,6 +12,7 @@
 # Ignorar arquivos temporários
 *.log
 *.tmp
+*.json
 
 # Ignorar configs do VSCode
 .vscode/
