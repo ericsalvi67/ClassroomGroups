@@ -200,7 +200,7 @@ void incluir_novo_aluno(Header* h, int codigoAluno, char nomeAlunoExt[50], int t
     printf("Aluno '%20s' adicionado a turma '%10s' com sucesso!\n", nomeAluno, turmaAtual->codigo);
 }
 
-void incluir_aluno_no_grupo_de_uma_turma(Header* h, int turmaIndexExt, int codigoAlunoExt, int numeroGrupoExt){  // 07
+void incluir_aluno_no_grupo_de_uma_turma(Header* h, int turmaIndexExt, int codigoAlunoExt, int numeroGrupoExt) {  // 07
     if (h->s_qClass == 0) {
         printf("Nenhuma turma cadastrada.\n");
         return;
@@ -445,7 +445,7 @@ void remover_aluno(Header *h) {  // 05
     printf("Aluno removido de todos os grupos da turma.\n");
 }
 
-void alunos_em_mais_de_uma_turma(Header h) {
+void alunos_em_mais_de_uma_turma(Header h) { // 11
     if (h.s_qClass < 2) {
         printf("E necessário ao menos duas turmas para essa verificacao.\n");
         return;
@@ -619,7 +619,7 @@ void remover_aluno_do_grupo(Header *h) { // 08
     }
 }
 
-void remover_turma(Header *h) {
+void remover_turma(Header *h) { // 02
     if (h->s_qClass == 0) {
         printf("Nenhuma turma cadastrada.\n");
         return;
@@ -792,8 +792,7 @@ void alunos_em_apenas_uma_turma(Header h) { // 12
 
 // ---------- //
 
-void inicioProg(Header* sistema)
-{
+void inicioProg(Header* sistema) {
     printf("-------------------\n");
     printf("Compilando informacoes...\n");
     //pre-carrega as turmas
@@ -868,8 +867,7 @@ void inicioProg(Header* sistema)
     printf("-------------------\n");
 }
 
-void menu(Header* sistema) //menu de opções para o usuario
-{
+void menu(Header* sistema) { //menu de opções para o usuario
     int opcao;
     printf("\n--- Menu ---\n");
     printf("1.  Incluir turma\n");
