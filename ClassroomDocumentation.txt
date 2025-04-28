@@ -1,9 +1,71 @@
-* main():
-   Na main é iniciada o header que é utilizado em todo programa, setado o numero de turmas para zero e a referencia para a turma para NULL.
+* Estruturas Utilizadas
+   Header:
+      Estrutura principal do sistema, contendo:
+         s_qClass -> a quantidade de turmas cadastradas no sistema.
+         turma -> um vetor dinâmico que armazena todas as turmas.
    
-   *inicioProg():
-      Em inicioProg() é populada todas as informacoes para utilizar de referencias e de testes de funcionabilidade e utilidade. Nela é carregada as turmas, os alunos nas turmas e grupos juntamente com os alunos inseridos.
+   Turma:
+      Cada turma é representada por:
+         codigo[20] -> o codigo identificador da turma.
+         alunos -> uma lista encadeada simples com os alunos dessa turma.
+         grupos -> uma lista encadeada simples com os grupos dessa turma.
+      
+   Aluno:
+      Cada aluno da turma ou grupo possui:
+         nome[100] -> o nome do aluno.
+         codigo -> um codigo numerico unico para identificar o aluno.
+         prox -> ponteiro par ao proximo aluno da lista.
+   
+   Grupo:
+      Cada grupo dentro de uma turma possui:
+         numero -> o numero identificador do grupo.
+         alunos_grupo -> uma lista encadeada de alunos que pertencem ao grupo.
+         prox -> ponteiro para o proximo grupo da lista
 
-   *menu():
-      No menu() é onde é realizada todas as execuçoes disponiveis no programa, se digitado 0, faz com que o programa encerre e desaloque a memoria da turma.
+////////////////////////////////////////////////////////////////////////////////
+
+* Organização do Código:
+   main.c -> gerencia o menu e fluxo principal do programa.
+   turma.c e turma.h -> operações de turma(incluir, listar, remover turmas).
+   aluno.c e aluno.h -> operações de alunos(incluir, listar, remover alunos).
+   grupo.c e grupo.h -> operações de grupos(incluir aluno no grupo, remover aluno do grupo).
+   relatorios.c e relatorios.h -> relatórios(consultar alunos de grupos, listar alunos sem grupo, listar alunos em mais ou menos de uma turma).
+   estruturas.h -> contém todas as estruturas utilzadas(Header, Turma, Aluno, Grupo)
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+* Funcionamento das Operações:
+   *main.c:
+      Na main é iniciada o header que é utilizado em todo programa, setado o numero de turmas para zero e a referencia para a turma para NULL.
+      
+      *inicioProg():
+         Em inicioProg() é populada todas as informacoes para utilizar de referencias e de testes de funcionabilidade e utilidade. Nela é carregada as turmas, os alunos nas turmas e grupos juntamente com os alunos inseridos.
+
+      *menu():
+         No menu() é onde é realizada todas as execuçoes disponiveis no programa, se digitado 0, faz com que o programa encerre e desaloque a memoria da turma.
+
+   *turma.c e turma.h:
+      *void incluir_nova_turma(Header* h, char novoCodigoExt[20]){
+         O sistema permite incluir uma nova turma através da digitação do código pelo usuário ou através de um parâmetro passado via código.
+         Antes de adicionar, o sistema verifica se já existe outra turma com o mesmo código para evitar duplicações.
+         Se for válido, a turma é alocada dinamicamente no vetor de turmas, e os ponteiros de alunos e grupos são inicializados como NULL.
+         Essa função é usada tanto para entrada manual de dados quanto para o pré-carregamento automático de turmas.
+      }
+
+
+   *grupo.c e grupo.h:
+      *void incluir_aluno_no_grupo_de_uma_turma(Header* h, int turmaIndexExt, int codigoAlunoExt, int numeroGrupoExt){
+         O sistema permite incluir um aluno em um grupo específico dentro de uma turma. 
+         Ele verifica se o aluno já pertence a algum grupo da turma (não permitindo duplicidade).
+         Se o grupo não existir, ele é criado automaticamente.
+         Após isso, o aluno é adicionado ao grupo
+      }
+      *void remover_aluno_do_grupo(Header *h){
+
+      }
+
+
+
+////////////////////////////////////////////////////////////////////////////////
 
