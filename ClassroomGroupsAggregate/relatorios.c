@@ -4,25 +4,33 @@
 #include <stdlib.h>
 #include <string.h>
 
-void consultar_alunos_dos_grupos_de_uma_turma(Header* h, int turmaIndex) {
+void consultar_alunos_dos_grupos_de_uma_turma(Header* h, int turmaIndex) { //09
     if (h->s_qClass == 0) {
         printf("Nenhuma turma cadastrada.\n");
         return;
     }
+    
+    Aluno *aluno = NULL;
+    Grupo *grupo = NULL;
+    Turma *turmaAtual = NULL;
 
-    if (turmaIndex < 0 || turmaIndex >= h->s_qClass) {
-        printf("Turma inválida.\n");
-        return;
+    if (turmaIndex == 0) {
+        do{
+            listar_turmas(*h);
+            printf("Digite o numero da turma que deseja acessar: ");
+            scanf("%d", &turmaIndex);
+            turmaIndex--;
+        } while (turmaIndex < 0 || turmaIndex >= h->s_qClass);
     }
 
-    Turma *turmaAtual = &h->turma[turmaIndex];
+    turmaAtual = &h->turma[turmaIndex];
 
     if (turmaAtual->grupos == NULL) {
-        printf("A turma '%s' nao possui nenhum grupo.\n", turmaAtual->codigo);
+        printf("A turma '%s' nao possui nenhum grupo cadastrado.\n", turmaAtual->codigo);
         return;
     }
 
-    Grupo *grupo = turmaAtual->grupos;
+    grupo = turmaAtual->grupos;
     printf("\n--- Grupos da Turma '%s' ---\n", turmaAtual->codigo);
 
     while (grupo != NULL) {
@@ -31,10 +39,10 @@ void consultar_alunos_dos_grupos_de_uma_turma(Header* h, int turmaIndex) {
         if (grupo->alunos_grupo == NULL) {
             printf("   Nenhum aluno neste grupo.\n");
         } else {
-            Aluno *a = grupo->alunos_grupo;
-            while (a != NULL) {
-                printf("   %d. %s\n", a->codigo, a->nome);
-                a = a->prox;
+            aluno = grupo->alunos_grupo;
+            while (aluno != NULL) {
+                printf("   %d. %s\n", aluno->codigo, aluno->nome);
+                aluno = aluno->prox;
             }
         }
 
@@ -118,7 +126,7 @@ void alunos_em_mais_de_uma_turma(Header h) { // 11
     printf("-------------------------------\n");
 }
 
-void listar_alunos_sem_grupo(Header* h) { // 10
+void listar_alunos_sem_grupo(Header* h) { //10
     if (h->s_qClass == 0) {
         printf("Nenhuma turma cadastrada.\n");
         return;
@@ -181,7 +189,7 @@ void listar_alunos_sem_grupo(Header* h) { // 10
     printf("-----------------------------------------------\n");
 }
 
-void alunos_em_apenas_uma_turma(Header h) { // 12
+void alunos_em_apenas_uma_turma(Header h) { //12
     if (h.s_qClass == 0) {
         printf("Nenhuma turma cadastrada.\n");
         return;

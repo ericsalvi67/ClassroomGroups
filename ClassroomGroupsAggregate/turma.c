@@ -55,7 +55,7 @@ void incluir_nova_turma(Header* h, char novoCodigoExt[20]) { // 01 - recebe um c
     printf("Turma '%10s' incluida com sucesso!\n", novoCodigo);
 }
 
-void remover_turma(Header *h) { // 02
+void remover_turma(Header *h) { //02
     if (h->s_qClass == 0) {
         printf("Nenhuma turma cadastrada.\n");
         return;

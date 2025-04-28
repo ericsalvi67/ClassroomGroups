@@ -4,13 +4,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-void listar_alunos(Header h, int turma) // 06
+void listar_alunos(Header h, int turma) //06
 {
     if (h.s_qClass == 0) 
     {
         printf("Nenhuma turma cadastrada.\n");
         return;
     }
+
+    Aluno *aux = NULL;
 
     if (turma < 0 || turma >= h.s_qClass) 
     {
@@ -23,7 +25,7 @@ void listar_alunos(Header h, int turma) // 06
         for (int i = 0; i < h.s_qClass; i++) 
         {
             printf("%d. %s\n", i + 1, h.turma[i].codigo);
-            Aluno *aux = h.turma[i].alunos;
+            aux = h.turma[i].alunos;
             if (aux == NULL) 
             {
                 printf("   Nenhum aluno cadastrado.\n");
@@ -40,7 +42,7 @@ void listar_alunos(Header h, int turma) // 06
     }
     else {
         printf("\n--- Alunos da Turma %s ---\n", h.turma[turma].codigo);
-        Aluno *aux = h.turma[turma].alunos;
+        aux = h.turma[turma].alunos;
         if (aux == NULL) 
         {
             printf("   Nenhum aluno cadastrado.\n");
@@ -57,10 +59,14 @@ void listar_alunos(Header h, int turma) // 06
     printf("-------------------\n");
 }
 
-void incluir_novo_aluno(Header* h, int codigoAluno, char nomeAlunoExt[50], int turmaIndexExt) // 04
+void incluir_novo_aluno(Header* h, int codigoAluno, char nomeAlunoExt[50], int turmaIndexExt) //04
 {   
     int turmaIndex;
     char nomeAluno[50];
+    Aluno *novo = NULL;
+    Turma *turmaAtual = NULL;
+    Aluno *aux = NULL;
+
     if ((codigoAluno == 0) && strcmp(nomeAlunoExt, "")== 0 && (turmaIndexExt == 0))
     {
         do
@@ -93,7 +99,7 @@ void incluir_novo_aluno(Header* h, int codigoAluno, char nomeAlunoExt[50], int t
         }
     } 
 
-    Aluno *novo = (Aluno*) malloc(sizeof(Aluno));
+    novo = (Aluno*) malloc(sizeof(Aluno));
     if (!novo) 
     {
         printf("Erro ao alocar memória para novo aluno.\n");
@@ -104,7 +110,7 @@ void incluir_novo_aluno(Header* h, int codigoAluno, char nomeAlunoExt[50], int t
     novo->codigo = codigoAluno;
     strcpy(novo->nome, nomeAluno);
 
-    Turma *turmaAtual = &h->turma[turmaIndex];
+    turmaAtual = &h->turma[turmaIndex];
 
     if (turmaAtual->alunos == NULL) 
     {
@@ -112,7 +118,7 @@ void incluir_novo_aluno(Header* h, int codigoAluno, char nomeAlunoExt[50], int t
     } 
     else 
     {
-        Aluno *aux = turmaAtual->alunos;
+        aux = turmaAtual->alunos;
         while (aux->prox != NULL) 
         {
             aux = aux->prox;

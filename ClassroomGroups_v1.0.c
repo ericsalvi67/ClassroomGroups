@@ -315,23 +315,24 @@ void incluir_aluno_no_grupo_de_uma_turma(Header* h, int turmaIndexExt, int codig
     alunoSelecionado->nome, grupoAtual->numero, turmaAtual->codigo);
 }
 
-void consultar_alunos_dos_grupos_de_uma_turma(Header* h) { // 09
+void consultar_alunos_dos_grupos_de_uma_turma(Header* h, int turmaIndex) { // 09
     if (h->s_qClass == 0) {
         printf("Nenhuma turma cadastrada.\n");
         return;
     }
     
-    int turmaIndex;
     Aluno *aluno = NULL;
     Grupo *grupo = NULL;
     Turma *turmaAtual = NULL;
 
-    do{
-        listar_turmas(*h);
-        printf("Digite o numero da turma que deseja acessar: ");
-        scanf("%d", &turmaIndex);
-        turmaIndex--;
-    } while (turmaIndex < 0 || turmaIndex >= h->s_qClass);
+    if (turmaIndex == 0) {
+        do{
+            listar_turmas(*h);
+            printf("Digite o numero da turma que deseja acessar: ");
+            scanf("%d", &turmaIndex);
+            turmaIndex--;
+        } while (turmaIndex < 0 || turmaIndex >= h->s_qClass);
+    }
 
     turmaAtual = &h->turma[turmaIndex];
 
@@ -519,7 +520,7 @@ void alunos_em_mais_de_uma_turma(Header h) { // 11
     printf("-------------------------------\n");
 }
 
-void remover_aluno_do_grupo(Header *h) { // 08
+void remover_aluno_do_grupo(Header *h) { //08
     if (h->s_qClass == 0) {
         printf("Nenhuma turma cadastrada.\n");
         return;
@@ -551,7 +552,7 @@ void remover_aluno_do_grupo(Header *h) { // 08
         return;
     }
 
-    consultar_alunos_dos_grupos_de_uma_turma(h); // Mostra os grupos e alunos
+    consultar_alunos_dos_grupos_de_uma_turma(h,turmaIndex); // Mostra os grupos e alunos
 
     
     printf("Digite o numero do grupo do qual deseja remover o aluno: ");
@@ -920,7 +921,7 @@ void menu(Header* sistema) { //menu de opções para o usuario
             remover_aluno_do_grupo(sistema);
             break;
         case 9:
-            consultar_alunos_dos_grupos_de_uma_turma(sistema);
+            consultar_alunos_dos_grupos_de_uma_turma(sistema,0);
             break;
         case 10:
             listar_alunos_sem_grupo(sistema);
