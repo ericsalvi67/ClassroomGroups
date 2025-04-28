@@ -1,0 +1,9 @@
+* main():
+   Na main é iniciada o header que é utilizado em todo programa, setado o numero de turmas para zero e a referencia para a turma para NULL.
+   
+   *inicioProg():
+      Em inicioProg() é populada todas as informacoes para utilizar de referencias e de testes de funcionabilidade e utilidade. Nela é carregada as turmas, os alunos nas turmas e grupos juntamente com os alunos inseridos.
+
+   *menu():
+      No menu() é onde é realizada todas as execuçoes disponiveis no programa, se digitado 0, faz com que o programa encerre e desaloque a memoria da turma.
+

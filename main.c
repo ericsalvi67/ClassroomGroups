@@ -11,71 +11,75 @@
 // menu
 void menu(Header* sistema) { //menu de opções para o usuario
     int opcao;
-    printf("\n--- Menu ---\n");
-    printf("1.  Incluir turma\n");
-    printf("2.  Remover turma\n"); 
-    printf("3.  Listar turmas\n");
 
-    printf("4.  Incluir aluno\n");
-    printf("5.  Remover aluno\n"); 
-    printf("6.  Listar alunos\n");
+    while (1)
+    {
+        printf("\n--- Menu ---\n");
+        printf("1.  Incluir turma\n");
+        printf("2.  Remover turma\n"); 
+        printf("3.  Listar turmas\n");
 
-    printf("7.  Incluir aluno no grupo\n");
-    printf("8.  Remover aluno de um grupo\n"); 
-    printf("9.  Consultar alunos dos grupos de uma turma\n");
+        printf("4.  Incluir aluno\n");
+        printf("5.  Remover aluno\n"); 
+        printf("6.  Listar alunos\n");
 
-    printf("10. Alunos sem grupo\n"); 
-    printf("11. Alunos em mais de uma turma\n"); 
-    printf("12. Alunos em apenas uma turma\n"); 
+        printf("7.  Incluir aluno no grupo\n");
+        printf("8.  Remover aluno de um grupo\n"); 
+        printf("9.  Consultar alunos dos grupos de uma turma\n");
 
-    printf("\n0. Sair\n");
+        printf("10. Alunos sem grupo\n"); 
+        printf("11. Alunos em mais de uma turma\n"); 
+        printf("12. Alunos em apenas uma turma\n"); 
 
-    do{
-        printf("Escolha uma opcao: ");
-        scanf("%d", &opcao);
-        getchar(); // Limpa o buffer do teclado
-    }while(opcao < 0 || opcao > 12);
+        printf("\n0. Sair\n");
 
-    switch (opcao) {
-        case 1:
-            incluir_nova_turma(sistema, "");
-            break;
-        case 2:
-            remover_turma(sistema);
-            break;
-        case 3:
-            listar_turmas(*sistema);
-            break;
-        case 4:
-            incluir_novo_aluno(sistema, 0, "", 0);
-            break;
-        case 5:
-            remover_aluno(sistema);
-            break;
-        case 6:
-            listar_alunos(*sistema, 0);
-            break;
-        case 7:
-            incluir_aluno_no_grupo_de_uma_turma(sistema,0,0,0);
-            break;
-        case 8:
-            remover_aluno_do_grupo(sistema);
-            break;
-        case 9:
-            consultar_alunos_dos_grupos_de_uma_turma(sistema, 0);
-            break;
-        case 10:
-            listar_alunos_sem_grupo(sistema);
-            break;
-        case 11:
-            alunos_em_mais_de_uma_turma(*sistema);
-            break;
-        case 12:
-            alunos_em_apenas_uma_turma(*sistema);
-            break;
-        case 0:
-            free(sistema->turma); // Libera a memória alocada para as turmas
-            exit(0);
+        do{
+            printf("Escolha uma opcao: ");
+            scanf("%d", &opcao);
+            getchar(); // Limpa o buffer do teclado
+        }while(opcao < 0 || opcao > 12);
+
+        switch (opcao) {
+            case 1:
+                incluir_nova_turma(sistema, "");
+                break;
+            case 2:
+                remover_turma(sistema);
+                break;
+            case 3:
+                listar_turmas(*sistema);
+                break;
+            case 4:
+                incluir_novo_aluno(sistema, 0, "", 0);
+                break;
+            case 5:
+                remover_aluno(sistema);
+                break;
+            case 6:
+                listar_alunos(*sistema, 0);
+                break;
+            case 7:
+                incluir_aluno_no_grupo_de_uma_turma(sistema,0,0,0);
+                break;
+            case 8:
+                remover_aluno_do_grupo(sistema);
+                break;
+            case 9:
+                consultar_alunos_dos_grupos_de_uma_turma(sistema, 0);
+                break;
+            case 10:
+                listar_alunos_sem_grupo(sistema);
+                break;
+            case 11:
+                alunos_em_mais_de_uma_turma(*sistema);
+                break;
+            case 12:
+                alunos_em_apenas_uma_turma(*sistema);
+                break;
+            case 0:
+                free(sistema->turma); // Libera a memória alocada para as turmas
+                exit(0);
+        }
     }
 }
 // inicializa turmas
@@ -162,8 +166,7 @@ int main() {
 
     inicioProg(&sistema);
 
-    while(1)
-        menu(&sistema);
+    menu(&sistema);
 
     return 0;
 }
