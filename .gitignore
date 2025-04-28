@@ -2,6 +2,7 @@
 *.o
 *.exe
 *.out
+!sistema.exe
 
 # Ignorar pastas de build
 /build/

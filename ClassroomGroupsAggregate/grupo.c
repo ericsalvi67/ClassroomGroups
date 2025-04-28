@@ -121,7 +121,7 @@ void incluir_aluno_no_grupo_de_uma_turma(Header* h, int turmaIndexExt, int codig
     alunoSelecionado->nome, grupoAtual->numero, turmaAtual->codigo);
 }
 
-void remover_aluno_do_grupo(Header *h) { // 08
+void remover_aluno_do_grupo(Header *h) { //08
     if (h->s_qClass == 0) {
         printf("Nenhuma turma cadastrada.\n");
         return;

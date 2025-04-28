@@ -62,15 +62,7 @@ void menu(Header* sistema) { //menu de opções para o usuario
             remover_aluno_do_grupo(sistema);
             break;
         case 9:
-            {
-                int turmaIndex;
-                listar_turmas(*sistema);
-                printf("Digite o numero da turma para consultar os grupos: ");
-                scanf("%d", &turmaIndex);
-                turmaIndex--; // Ajusta índice
-                consultar_alunos_dos_grupos_de_uma_turma(sistema, turmaIndex);
-            }
-            break;
+            consultar_alunos_dos_grupos_de_uma_turma(sistema, 0);
             break;
         case 10:
             listar_alunos_sem_grupo(sistema);
