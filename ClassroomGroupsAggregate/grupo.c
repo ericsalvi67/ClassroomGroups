@@ -221,3 +221,51 @@ void remover_aluno_do_grupo(Header *h) { //08
         free(grupoAtual); 
     }
 }
+
+void consultar_alunos_dos_grupos_de_uma_turma(Header* h, int turmaIndex) { //09
+    if (h->s_qClass == 0) {
+        printf("Nenhuma turma cadastrada.\n");
+        return;
+    }
+    
+    Aluno *aluno = NULL;
+    Grupo *grupo = NULL;
+    Turma *turmaAtual = NULL;
+
+    if (turmaIndex == 0) {
+        do{
+            listar_turmas(*h);
+            printf("Digite o numero da turma que deseja acessar: ");
+            scanf("%d", &turmaIndex);
+            turmaIndex--;
+        } while (turmaIndex < 0 || turmaIndex >= h->s_qClass);
+    }
+
+    turmaAtual = &h->turma[turmaIndex];
+
+    if (turmaAtual->grupos == NULL) {
+        printf("A turma '%s' nao possui nenhum grupo cadastrado.\n", turmaAtual->codigo);
+        return;
+    }
+
+    grupo = turmaAtual->grupos;
+    printf("\n--- Grupos da Turma '%s' ---\n", turmaAtual->codigo);
+
+    while (grupo != NULL) {
+        printf("Grupo %d:\n", grupo->numero);
+
+        if (grupo->alunos_grupo == NULL) {
+            printf("   Nenhum aluno neste grupo.\n");
+        } else {
+            aluno = grupo->alunos_grupo;
+            while (aluno != NULL) {
+                printf("   %d. %s\n", aluno->codigo, aluno->nome);
+                aluno = aluno->prox;
+            }
+        }
+
+        grupo = grupo->prox;
+    }
+
+    printf("------------------------------\n");
+}
