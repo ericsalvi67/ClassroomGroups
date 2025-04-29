@@ -32,7 +32,6 @@
    relatorios.c e relatorios.h -> relatórios(listar alunos sem grupo, listar alunos em mais ou menos de uma turma).
    estruturas.h -> contém todas as estruturas utilzadas(Header, Turma, Aluno, Grupo)
 
-
 ////////////////////////////////////////////////////////////////////////////////
 
 * Funcionamento das Operações:
@@ -46,6 +45,11 @@
          No menu() é onde é realizada todas as execuçoes disponiveis no programa, se digitado 0, faz com que o programa encerre e desaloque a memoria da turma.
 
    *turma.c e turma.h:
+      *void listar_turmas(Header h){
+         Exibe todas as turmas cadastradas no sistema em ordem e com o seu respectivo código.
+         Se nenhuma turma estiver cadastrada, exibe uma mensagem informando.
+      }
+
       *void incluir_nova_turma(Header* h, char novoCodigoExt[20]){
          O sistema permite incluir uma nova turma através da digitação do código pelo usuário ou através de um parâmetro passado via código.
          Antes de adicionar, o sistema verifica se já existe outra turma com o mesmo código para evitar duplicações.
@@ -54,53 +58,70 @@
       }
 
       *void remover_turma(Header* h);{
-          A função permite ao usuário efetuar a remoção de turmas, primeiramente valida se existe qualquer turma antes de efetuar a remoção. 
-          É exibido para o usuário quais turmas ele pode remover. Definida a turma o programa começa removendo os alunos da turma e apos isso, 
+         A função permite ao usuário efetuar a remoção de turmas, primeiramente valida se existe qualquer turma antes de efetuar a remoção. 
+         É exibido para o usuário quais turmas ele pode remover. Definida a turma o programa começa removendo os alunos da turma e apos isso, 
          remove os alunos que estão em uma lista simples dentro do grupo e por fim, remove o grupo se estiver vazio. Finaliza removendo a turma e,
          realoca todas as outras turmas para respeitar a sequencia do vetor.  
       }
-
 
    *grupo.c e grupo.h:
       *void incluir_aluno_no_grupo_de_uma_turma(Header* h, int turmaIndexExt, int codigoAlunoExt, int numeroGrupoExt){
          O sistema permite incluir um aluno em um grupo específico dentro de uma turma. 
          Ele verifica se o aluno já pertence a algum grupo da turma (não permitindo duplicidade).
          Se o grupo não existir, ele é criado automaticamente.
-         Após isso, o aluno é adicionado ao grupo
+         Após isso, o aluno é adicionado ao grupo.
       }
 
       *void remover_aluno_do_grupo(Header *h){
-          Para remover um aluno do grupo, o programa solicita ao usuário após listar a turma, qual desera remover o aluno,
+         Para remover um aluno do grupo, o programa solicita ao usuário após listar a turma, qual desera remover o aluno,
          e quando fornecido verifica se existe algum grupo naquela turma, se houver, solicita ao usuário informar o grupo que deseja remover.
          Se houver o grupo e houver aluno vinculado, solicita ao usuário informar o codigo do aluno para remove-lo.
-          Utilizando ponteiros auxiliares faz-se uma varedura pela lista até encontrar o aluno e remove ele.
-          Se o ponteiro percorre todo array é verificado se o aluno foi removido e se todos os alunos foram removidos do grupo, é removido o grupo.
+         Utilizando ponteiros auxiliares faz-se uma varedura pela lista até encontrar o aluno e remove ele.
+         Se o ponteiro percorre todo array é verificado se o aluno foi removido e se todos os alunos foram removidos do grupo, é removido o grupo.
+      }
+
+      *void consultar_alunos_dos_grupos_de_uma_turma(Header* h, int turmaIndex) {
+         A função mostra todos os grupos de uma turma selecionada e os alunos que pertencem a cada grupo.
+         Se o índice da turma for 0, o sistema solicita que o usuário escolha a turma manualmente.
+         Caso a turma não tenha grupos cadastrados, uma mensagem é exibida.
+         Se houver grupos, o sistema percorre cada grupo e imprime o número do grupo seguido dos alunos pertencentes a ele.
       }
 
    *aluno.c e aluno.h:
+      *void listar_alunos(Header h, int turma){
+         Para listar os alunos, existem duas opções, ou por uma função durante remoção ou inserção passando qual turma deseja ou pela
+         propria função onde mostra todas as turmas e todos alunos vinculados a ela.
+         Após uma validação verificando a existencia de uma turma o programa percorre o array da turma e percorre o array dos alunos encadeados. 
+      }
+
       *void incluir_novo_aluno(Header* h, int codigoAluno, char nomeAlunoExt[50], int turmaIndexExt){
-          Na inclusão do aluno, as variaveis da função carregam os dados para popular as informacoes ou é inserido pelo usuário
+         Na inclusão do aluno, as variaveis da função carregam os dados para popular as informacoes ou é inserido pelo usuário
          os dados, ao inserir, o programa percorre até encontrar NULL na posição da alocação e insere os novos dados na turma na sequencia. 
       }
-      
-      *void listar_alunos(Header h, int turma){
-          Para listar os alunos, existem duas opções, ou por uma função durante remoção ou inserção passando qual turma deseja ou pela
-         propria função onde mostra todas as turmas e todos alunos vinculados a ela.
-          Após uma validação verificando a existencia de uma turma o programa percorre o array da turma e percorre o array dos alunos encadeados. 
+
+      *void remover_aluno(Header *h) {
+         A função remove um aluno da lista de alunos de uma turma e também de todos os grupos nos quais ele estiver cadastrado.
+         O usuário escolhe a turma, visualiza os alunos e informa o código do aluno a ser removido.
+         A função percorre a lista de alunos da turma, remove o nó correspondente e libera a memória.
+         Depois, percorre todos os grupos da turma e remove o mesmo aluno se ele estiver presente em algum grupo.
       }
    
    *relatorios.c e relatorios.h:
+      *void alunos_em_mais_de_uma_turma(Header h) {
+         A função percorre todas as turmas e identifica os alunos que estão cadastrados em duas ou mais delas.
+         Se houver alunos em múltiplas turmas, seus nomes e códigos são listados.
+         Caso contrário, uma mensagem é exibida informando que todos os alunos estão presentes em apenas uma turma.
+      }
       *void listar_alunos_sem_grupo(Header* h){
-          O programa solicita ao usuário fornecer uma das turmas listadas para poder verificar se há alunos na turma e se, 
+         O programa solicita ao usuário fornecer uma das turmas listadas para poder verificar se há alunos na turma e se, 
          isso se faz verdade percorre os alunos que estao em um grupo e compara com os alunos daquela turma, como o aluno não pode estar em 2+ grupos ao mesmo tempo
          o programa retorna somente os alunos que não estão em um grupo.
       }
 
       *void alunos_em_apenas_uma_turma(Header h){
-          Ao solicitar pelo usuário a função, o programa percorre todas as turmas e verifica se, aquele aluno não existe em outra turma,
-         e se não encontrado mostra para o usuário seu codigo e seu nome 
+         Ao solicitar pelo usuário a função, o programa percorre todas as turmas e verifica se, aquele aluno não existe em outra turma,
+         e se não encontrado mostra para o usuário seu codigo e seu nome.
       }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 
