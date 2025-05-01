@@ -6,7 +6,7 @@
 
 void alunos_em_mais_de_uma_turma(Header h) { // 11
     if (h.s_qClass < 2) {
-        printf("E necessário ao menos duas turmas para essa verificacao.\n");
+        printf("E necessario ao menos duas turmas para essa verificacao.\n");
         return;
     }
 
@@ -24,6 +24,7 @@ void alunos_em_mais_de_uma_turma(Header h) { // 11
         a1 = h.turma[i].alunos;
         while (a1 != NULL) {
 
+            // conta em quantas turmas o aluno aparece
             int contador = 0;
 
             for (int j = 0; j < h.s_qClass; j++) {
@@ -31,7 +32,10 @@ void alunos_em_mais_de_uma_turma(Header h) { // 11
 
                 a2 = h.turma[j].alunos;
                 while (a2 != NULL) {
+
+                    // se for o mesmo aluno
                     if (a1->codigo == a2->codigo) {
+                        // soma mais um no contador
                         contador++;
                         break;
                     }
@@ -39,7 +43,7 @@ void alunos_em_mais_de_uma_turma(Header h) { // 11
                 }
             }
 
-            // Se tem +1 turma e nao foi listado
+            // Se ele aparece em mais de uma turma
             if (contador > 0) {
                 jaExiste = 0;
                 aux = jaListados;
@@ -50,7 +54,8 @@ void alunos_em_mais_de_uma_turma(Header h) { // 11
                     }
                     aux = aux->prox;
                 }
-
+                
+                // se ele nao tiver listado ja, o lista em jaListados
                 if (!jaExiste) {
                     printf("%d. %s\n",a1->codigo, a1->nome);
 
@@ -78,13 +83,12 @@ void alunos_em_mais_de_uma_turma(Header h) { // 11
     printf("-------------------------------\n");
 }
 
-void listar_alunos_sem_grupo(Header* h) { //10
+void listar_alunos_sem_grupo(Header* h, int turmaIndex) { //10
     if (h->s_qClass == 0) {
         printf("Nenhuma turma cadastrada.\n");
         return;
     }
 
-    int turmaIndex;
     int estaEmGrupo;
     int encontrou = 0;
     Turma *turmaAtual = NULL;
@@ -92,13 +96,15 @@ void listar_alunos_sem_grupo(Header* h) { //10
     Grupo *grupo = NULL;
     Aluno *alunoGrupo = NULL;
     
-    do {
-        listar_turmas(*h);
-        printf("Digite o numero da turma para verificar: ");
-        scanf("%d", &turmaIndex);
-        turmaIndex--;
-    } while (turmaIndex < 0 || turmaIndex >= h->s_qClass);
-
+    if (turmaIndex == -1)
+    {
+        do {
+            listar_turmas(*h);
+            printf("Digite o numero da turma para verificar: ");
+            scanf("%d", &turmaIndex);
+            turmaIndex--;
+        } while (turmaIndex < 0 || turmaIndex >= h->s_qClass);
+    }
     turmaAtual = &h->turma[turmaIndex];
 
     if (turmaAtual->alunos == NULL) {

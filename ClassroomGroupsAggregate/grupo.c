@@ -33,8 +33,8 @@ void incluir_aluno_no_grupo_de_uma_turma(Header* h, int turmaIndexExt, int codig
             return;
         }
 
-        listar_alunos(*h, turmaIndex);
         do{
+            listar_alunos_sem_grupo(h, turmaIndex);
             printf("Digite o codigo do aluno que deseja adicionar a um grupo: ");
             scanf("%d", &codigoAluno);
         } while (codigoAluno <= 0);
@@ -49,6 +49,7 @@ void incluir_aluno_no_grupo_de_uma_turma(Header* h, int turmaIndexExt, int codig
             return;
         }
 
+        consultar_alunos_dos_grupos_de_uma_turma(h,turmaIndex);
         printf("Digite o numero do grupo: ");
         scanf("%d", &numeroGrupo);
 
@@ -57,6 +58,8 @@ void incluir_aluno_no_grupo_de_uma_turma(Header* h, int turmaIndexExt, int codig
     {
         turmaAtual = &h->turma[turmaIndexExt - 1]; // Ajusta o índice para 0 baseado (1,2,3) -> (0,1,2). Baseado no Listar_turmas
         alunoSelecionado = turmaAtual->alunos;
+
+        // roda enquanto nao chega ao fim e enquanto o codigo nao for o mesmo do aluno
         while (alunoSelecionado != NULL && alunoSelecionado->codigo != codigoAluno) {
             alunoSelecionado = alunoSelecionado->prox;
             if (alunoSelecionado == NULL) {
@@ -67,6 +70,8 @@ void incluir_aluno_no_grupo_de_uma_turma(Header* h, int turmaIndexExt, int codig
 
     // Verifica se o aluno já está em algum grupo
     Grupo *g = turmaAtual->grupos;
+
+    // ate nao chegar ao fim
     while (g != NULL) {
         Aluno *a = g->alunos_grupo;
         while (a != NULL) {
@@ -117,7 +122,7 @@ void incluir_aluno_no_grupo_de_uma_turma(Header* h, int turmaIndexExt, int codig
         aux->prox = novoAlunoGrupo;
     }
 
-    printf("Aluno '%s' adicionado ao grupo %d da turma '%s'.\n",
+    printf("Aluno '%15s' adicionado ao grupo %d da turma '%10s'.\n",
     alunoSelecionado->nome, grupoAtual->numero, turmaAtual->codigo);
 }
 
@@ -232,7 +237,7 @@ void consultar_alunos_dos_grupos_de_uma_turma(Header* h, int turmaIndex) { //09
     Grupo *grupo = NULL;
     Turma *turmaAtual = NULL;
 
-    if (turmaIndex == 0) {
+    if (turmaIndex == -1) {
         do{
             listar_turmas(*h);
             printf("Digite o numero da turma que deseja acessar: ");

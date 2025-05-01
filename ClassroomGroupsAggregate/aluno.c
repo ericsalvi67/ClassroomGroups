@@ -14,13 +14,13 @@ void listar_alunos(Header h, int turma) //06
 
     Aluno *aux = NULL;
 
-    if (turma < 0 || turma >= h.s_qClass) 
+    if (turma < -1 || turma >= h.s_qClass) 
     {
         printf("Turma inválida.\n");
         return;
     }
 
-    if (turma == 0){
+    if (turma == -1){
         printf("\n--- Lista de Alunos por Turma ---\n");
         for (int i = 0; i < h.s_qClass; i++) 
         {
@@ -66,6 +66,8 @@ void incluir_novo_aluno(Header* h, int codigoAluno, char nomeAlunoExt[50], int t
     Aluno *novo = NULL;
     Turma *turmaAtual = NULL;
     Aluno *aux = NULL;
+    Aluno *VerificaAluno = NULL;
+
 
     if ((codigoAluno == 0) && strcmp(nomeAlunoExt, "")== 0 && (turmaIndexExt == 0))
     {
@@ -75,6 +77,7 @@ void incluir_novo_aluno(Header* h, int codigoAluno, char nomeAlunoExt[50], int t
             scanf("%d", &codigoAluno);
             fflush(stdin); // Limpa o buffer do teclado
         } while (codigoAluno == 0);
+
         do
         {
             printf("Digite o nome do aluno: ");
@@ -87,6 +90,17 @@ void incluir_novo_aluno(Header* h, int codigoAluno, char nomeAlunoExt[50], int t
             scanf("%d", &turmaIndex);
         } while (turmaIndex < 0 );
         turmaIndex -= 1; // Ajusta o índice para 0 baseado (1,2,3) -> (0,1,2). Baseado no Listar_turmas 
+
+        VerificaAluno = h->turma[turmaIndex].alunos;
+        while (VerificaAluno != NULL) //valida aluno por aluno
+        {
+            if (VerificaAluno->codigo == codigoAluno)
+            {
+                printf("O codigo %d ja esta vinculado a um aluno na turma.\n",VerificaAluno->codigo);
+                return;
+            }
+            aux = aux->prox;
+        }
     }
     else 
     {

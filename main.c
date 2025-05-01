@@ -1,3 +1,8 @@
+/* 
+    Para inicializar o codigo caso for removido o sistema.exe ou seja preciso recompilar o programa, sera necessario executar o comando abaixo: 
+        - gcc ClassroomGroupsAggregate/*.c main.c -IClassroomGroupsLibrary -o sistema
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -56,7 +61,7 @@ void menu(Header* sistema) { //menu de opções para o usuario
                 remover_aluno(sistema);
                 break;
             case 6:
-                listar_alunos(*sistema, 0);
+                listar_alunos(*sistema, -1);
                 break;
             case 7:
                 incluir_aluno_no_grupo_de_uma_turma(sistema,0,0,0);
@@ -65,10 +70,10 @@ void menu(Header* sistema) { //menu de opções para o usuario
                 remover_aluno_do_grupo(sistema);
                 break;
             case 9:
-                consultar_alunos_dos_grupos_de_uma_turma(sistema, 0);
+                consultar_alunos_dos_grupos_de_uma_turma(sistema, -1);
                 break;
             case 10:
-                listar_alunos_sem_grupo(sistema);
+                listar_alunos_sem_grupo(sistema, -1);
                 break;
             case 11:
                 alunos_em_mais_de_uma_turma(*sistema);
@@ -84,16 +89,18 @@ void menu(Header* sistema) { //menu de opções para o usuario
 }
 // inicializa turmas
 void inicioProg(Header* sistema) {
-    printf("-------------------\n");
+    printf("---------------------------------------------\n");
     printf("Compilando informacoes...\n");
     //pre-carrega as turmas
+    printf("--- Incluido turmas ---\n");
     incluir_nova_turma(sistema, "Turma 1");
     incluir_nova_turma(sistema, "Turma 2");
     incluir_nova_turma(sistema, "Turma 3");
     incluir_nova_turma(sistema, "Turma da monica");
     incluir_nova_turma(sistema, "Turma do bairro");
-    printf("--- Turmas incluidas ---\n");
+    printf("--- Turmas incluidas com sucesso ---\n");
     //pre-carrega os alunos
+    printf("--- Incluido alunos ---\n");
     incluir_novo_aluno(sistema, 123, "Eric Salvi", 1);
     incluir_novo_aluno(sistema, 123, "Eric Salvi", 4);
     incluir_novo_aluno(sistema, 123, "Eric Salvi", 3);
@@ -133,8 +140,9 @@ void inicioProg(Header* sistema) {
     incluir_novo_aluno(sistema, 148, "Vinicius Lima", 4);
     incluir_novo_aluno(sistema, 149, "Amanda Martins", 3);
     incluir_novo_aluno(sistema, 150, "Lucas Ferreira", 1);
-    printf("--- Alunos incluidos ---\n");
+    printf("--- Alunos incluidos com sucesso ---\n");
     //pre-carrega os alunos e grupos
+    printf("--- Incluindo grupos e alunos ---\n");
     incluir_aluno_no_grupo_de_uma_turma(sistema, 1, 123, 1); 
     incluir_aluno_no_grupo_de_uma_turma(sistema, 1, 124, 1);
     incluir_aluno_no_grupo_de_uma_turma(sistema, 2, 125, 2); 
@@ -153,9 +161,9 @@ void inicioProg(Header* sistema) {
     incluir_aluno_no_grupo_de_uma_turma(sistema, 1, 138, 3);
     incluir_aluno_no_grupo_de_uma_turma(sistema, 2, 139, 1);
     incluir_aluno_no_grupo_de_uma_turma(sistema, 3, 140, 2);
-    printf("--- Grupos incluidos ---\n");
-    printf("Informacoes incluidas com sucesso.\n");
-    printf("-------------------\n");
+    printf("--- Grupos e alunos incluidos com sucesso ---\n");
+    printf("\nInformacoes incluidas com sucesso.\n");
+    printf("---------------------------------------------\n");
 }
 
 // main

@@ -42,10 +42,12 @@ void incluir_nova_turma(Header* h, char novoCodigoExt[20]) { // 01 - recebe um c
         return;
     }
 
+    // apontando para a nova "futura turma"
     h->turma = temp;
 
-    // nova turma é iniciada
+    // copia o novocodigo para o codigo dentro da nova turma que esta sendo criada
     strcpy(h->turma[h->s_qClass].codigo, novoCodigo);
+    // inicializa essa nova turma com alunos NULL e grupos NULL;
     h->turma[h->s_qClass].alunos = NULL;
     h->turma[h->s_qClass].grupos = NULL;
 
@@ -61,6 +63,7 @@ void remover_turma(Header *h) { //02
         return;
     }
 
+    int i;
     int turmaIndex;
     Grupo *tempGrupo = NULL;
     Aluno *temp = NULL;
@@ -103,12 +106,14 @@ void remover_turma(Header *h) { //02
         free(tempGrupo);
     }
 
+    
     // Deslocar as turmas para seguir sequencia
-    for (int i = turmaIndex; i < h->s_qClass - 1; i++) {
+    for (i = turmaIndex; i < h->s_qClass - 1; i++) {
         h->turma[i] = h->turma[i + 1];
     }
 
     h->s_qClass--;
-
+    h->turma = realloc(h->turma, (h->s_qClass) * sizeof(Turma));
+    
     printf("Turma removida com sucesso.\n");
 }

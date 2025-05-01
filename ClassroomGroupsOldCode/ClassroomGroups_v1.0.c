@@ -668,11 +668,13 @@ void remover_turma(Header *h) { // 02
         free(tempGrupo);
     }
 
+    int i;
     // Deslocar as turmas para seguir sequencia
-    for (int i = turmaIndex; i < h->s_qClass - 1; i++) {
+    for (i = turmaIndex; i < h->s_qClass - 1; i++) {
         h->turma[i] = h->turma[i + 1];
     }
-
+    
+    h->turma = realloc(h->turma, (h->s_qClass - 1) * sizeof(Turma));
     h->s_qClass--;
 
     printf("Turma removida com sucesso.\n");
