@@ -16,7 +16,7 @@ void listar_alunos(Header h, int turma) //06
 
     if (turma < -1 || turma >= h.s_qClass) 
     {
-        printf("Turma inválida.\n");
+        printf("Turma inválida.\n"); //aqui tem alterção pra develop
         return;
     }
 
